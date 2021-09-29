@@ -1,0 +1,2 @@
+{:tasks
+ {sanity (shell "clojure -M -m hello-world.main")}}
