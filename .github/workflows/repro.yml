@@ -41,7 +41,7 @@ jobs:
           path: |
             ~/.m2/repository
             ~/.gitlibs
-          keys: ${{ runner.os }}-cljdeps-${{ hashFiles('deps.edn') }}
+          key: ${{ runner.os }}-cljdeps-${{ hashFiles('deps.edn') }}
           restore-keys: $${ runner.os }}-cljdeps-
 
       - name: Show tool versions
