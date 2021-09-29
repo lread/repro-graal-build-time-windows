@@ -15,35 +15,44 @@ jobs:
         repro:
           - sanity
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Install GraalVM
-        - uses: DeLaGuardo/setup-graalvm@5.0
-          with:
-            graalvm: '21.2.0'
-            java: 'java11'
+      - name: Install GraalVM
+      - uses: DeLaGuardo/setup-graalvm@5.0
+        with:
+          graalvm: '21.2.0'
+          java: 'java11'
 
-        - name: Install Babashka
-          uses: turtlequeue/setup-babashka@v1.3.0
-          with:
-            babashka-version: 0.6.1
+      - name: Install Babashka
+        uses: turtlequeue/setup-babashka@v1.3.0
+        with:
+          babashka-version: 0.6.1
 
-        - name: Install Clojure
-          uses: DeLaGuardo/setup-clojure@3.5
-          with:
-            cli: 1.10.3.986
+      - name: Install Clojure
+        uses: DeLaGuardo/setup-clojure@3.5
+        with:
+          cli: 1.10.3.986
 
-        - name: Show tool versions
-          run: |
-            echo "Java"
-            java --version
-            echo "Babashka"
-            bb --version
-            echo "Clojure"
-            clojure --version
+      - name: Apply Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+          keys: ${{ runner.os }}-cljdeps-${{ hashFiles('deps.edn') }}
+          restore-keys: $${ runner.os }}-cljdeps-
 
-        - name: Run repro ${{ matrix.repro }}
-          run: |
-            bb $${ matrix.repro }}
+      - name: Show tool versions
+        run: |
+          echo "Java"
+          java --version
+          echo "Babashka"
+          bb --version
+          echo "Clojure"
+          clojure --version
+
+      - name: Run repro ${{ matrix.repro }}
+        run: |
+          bb $${ matrix.repro }}
