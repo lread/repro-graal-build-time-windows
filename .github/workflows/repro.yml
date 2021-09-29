@@ -42,7 +42,7 @@ jobs:
             ~/.m2/repository
             ~/.gitlibs
           key: ${{ runner.os }}-cljdeps-${{ hashFiles('deps.edn') }}
-          restore-keys: $${ runner.os }}-cljdeps-
+          restore-keys: ${{ runner.os }}-cljdeps-
 
       - name: Show tool versions
         run: |
@@ -55,4 +55,4 @@ jobs:
 
       - name: Run repro ${{ matrix.repro }}
         run: |
-          bb $${ matrix.repro }}
+          bb ${{ matrix.repro }}
