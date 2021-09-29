@@ -1,2 +1,8 @@
 {:tasks
- {sanity (shell "clojure -M -m hello-world.main")}}
+ {:requires ([clojure.string :as str])
+  :init (do
+          (def windows? (str/starts-with? (System/getProperty "os.name")
+                                          "Windows")))
+
+  sanity (shell (str (when windows? "powershell ")
+                     "clojure -M -m hello-world.main"))}}
