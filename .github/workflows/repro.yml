@@ -17,6 +17,7 @@ jobs:
           - sanity-java
           - baseline
           - gbt
+          - specific-iabt
 
     name: ${{ matrix.sys.os }} - ${{ matrix.repro }}
 

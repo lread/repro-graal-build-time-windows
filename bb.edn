@@ -75,4 +75,17 @@
                   "-jar" "target/uber-gbt.jar"
                   "-H:Name=target/hello-world")
            (println "Running built native image")
+           (shell "target/hello-world"))}
+
+  specific-iabt
+  {:doc "Try to replicate graal-build-time work by expressing as specific --initialize-at-build-time"
+   :depends [clean uber-jar -graalvm-native-image]
+   :task (do
+           (println "Building native image")
+           (shell -graalvm-native-image
+                  "--no-fallback"
+                  "--initialize-at-build-time=clojure,hello_world"
+                  "-jar" "target/uber.jar"
+                  "-H:Name=target/hello-world")
+           (println "Running built native image")
            (shell "target/hello-world"))}}}

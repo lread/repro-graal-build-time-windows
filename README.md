@@ -32,13 +32,18 @@ We are using babashka tasks to launch reproduction scenarios.
 
 Relevant tasks:
 ```
-sanity       Simple sanity test, run our program using Clojure
-sanity-java  Simple sanity test, run our program from compiled classes in jar
-baseline     Build and run native image using global --initialize-at-build-time
-gbt          Build and run native image using graal-build-time without global --initialize-at-build-time. This one fails on Windows.
+sanity        Simple sanity test, run our program using Clojure
+sanity-java   Simple sanity test, run our program from compiled classes in jar
+baseline      Build and run native image using global --initialize-at-build-time
+gbt           Build and run native image using graal-build-time without global --initialize-at-build-time. This one fails on Windows.
+specific-iabt Try to replicate graal-build-time work by expressing as specific --initialize-at-build-time
 ```
 
-The task that fails on Windows is `gbt`.
+The task that fails on Windows are `gbt` and `specific-iabt`.
+
+I added `specific-iabt` to see what would happen if we removed graal-build-time from the equation and instead simply specified the same packages to initialize via `--initialize-at-build-time=` that graal-build-time would have done for us.
+The result look the same as `gbt`.
+Which is good, the problem is not triggered by the way graal-build-time is doing its work.
 
 ### GitHub Actions
 
