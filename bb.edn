@@ -18,6 +18,9 @@
   uber-jar {:doc "Compile to classes and create jar"
             :task (real-clojure "-T:build uber-jar")}
 
+  uber-jar-gbt {:doc "Compile classes and create jar that includes graal-build-time"
+                :task (real-clojure "-T:build uber-jar-gbt")}
+
   -graalvm-home
   {:doc "Returns GRAALVM_HOME env var"
    :task (let [env (System/getenv "GRAALVM_HOME")]
@@ -50,7 +53,7 @@
    :task (shell "java -jar target/uber.jar")}
 
   baseline
-  {:doc "Use global --initialize-at-build-time"
+  {:doc "Build and run native image using global --initialize-at-build-time"
    :depends [clean uber-jar -graalvm-native-image]
    :task (do
            (println "Building native image")
@@ -58,6 +61,18 @@
                   "--initialize-at-build-time"
                   "--no-fallback"
                   "-jar" "target/uber.jar"
+                  "-H:Name=target/hello-world")
+           (println "Running built native image")
+           (shell "target/hello-world"))}
+
+  gbt
+  {:doc "Build and run native image using graal-build-time without global --initialize-at-build-time. This one fails on Windows."
+   :depends [clean uber-jar-gbt -graalvm-native-image]
+   :task (do
+           (println "Building native image")
+           (shell -graalvm-native-image
+                  "--no-fallback"
+                  "-jar" "target/uber-gbt.jar"
                   "-H:Name=target/hello-world")
            (println "Running built native image")
            (shell "target/hello-world"))}}}

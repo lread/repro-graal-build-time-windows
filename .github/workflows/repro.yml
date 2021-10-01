@@ -16,6 +16,7 @@ jobs:
           - sanity
           - sanity-java
           - baseline
+          - gbt
 
     name: ${{ matrix.sys.os }} - ${{ matrix.repro }}
 

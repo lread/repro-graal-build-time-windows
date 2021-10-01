@@ -25,28 +25,22 @@ We'll cross that bridge if/when we come to it.
 Using current Clojure: v1.10.3
 And current GraalVM Community Edition: v21.2.0
 
-### Sanity: run test program via Clojure
 
-Running:
-```
-clojure -M -m hello-world.main
-```
-Produces:
-```
-Hello, running tests in sample namespace.
+### Tasks
 
-Testing hello-world.sample-test
+We are using babashka tasks to launch reproduction scenarios.
 
-Ran 1 tests containing 1 assertions.
-0 failures, 0 errors.
-All done.
+Relevant tasks:
+```
+sanity       Simple sanity test, run our program using Clojure
+sanity-java  Simple sanity test, run our program from compiled classes in jar
+baseline     Build and run native image using global --initialize-at-build-time
+gbt          Build and run native image using graal-build-time without global --initialize-at-build-time. This one fails on Windows.
 ```
 
-### Baseline: use global --initialize-at-build-time
-This should pass for all platforms.
+The task that fails on Windows is `gbt`.
 
-### Repro #1: use clj-easy/graal-build-time
-I expect this to fail for Windows.
+### GitHub Actions
 
-### Repro #2: use specific --initialize-at-build-time
-This, theoretically, expresses the same thing as repro #1 and should fail on Windows.
+Have setup GitHub Actions to run each scenario under macOS, ubuntu and Windows.
+We should see failure for Windows for `gbt`.
