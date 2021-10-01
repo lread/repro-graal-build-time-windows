@@ -3,7 +3,7 @@ name: Reproduce GraalVM Issue
 on: push
 
 jobs:
-  sanity:
+  scenario:
     runs-on: ${{ matrix.sys.os }}
     strategy:
       fail-fast: false
@@ -57,6 +57,9 @@ jobs:
           bb --version
           echo "Clojure"
           clojure --version
+
+      - name: Setup VC VARS for Windows
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: Run repro ${{ matrix.repro }}
         run: |
