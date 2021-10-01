@@ -2,4 +2,4 @@
  :aliases
  {:build {:deps {io.github.clojure/tools.build {:git/tag "v0.5.1" :git/sha "21da7d4"}}
           :ns-default build}
-  :gbt {:deps {com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}}}}}
+  :gbt {:extra-deps {com.github.clj-easy/graal-build-time {:mvn/version "0.1.4"}}}}}

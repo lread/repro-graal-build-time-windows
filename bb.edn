@@ -1,8 +1,63 @@
 {:tasks
- {:requires ([clojure.string :as str])
+ {:requires ([babashka.fs :as fs]
+             [clojure.string :as str])
+  :enter (println (format "-[%s]-" (:name (current-task))))
   :init (do
           (def windows? (str/starts-with? (System/getProperty "os.name")
-                                          "Windows")))
+                                          "Windows"))
+          ;; because we are trying to reproduce an issue, shell out to actual real version of clojure
+          ;; instead of babashka's excellent convenience (clojure ...)
+          (defn real-clojure [sargs]
+            (shell (str (when windows? "powershell ") "clojure "
+                        sargs))))
 
-  sanity (shell (str (when windows? "powershell ")
-                     "clojure -M -m hello-world.main"))}}
+  ;; supporting tasks
+  clean {:doc "Delete build work and artifacts"
+         :task (fs/delete-tree "targe")}
+
+  uber-jar {:doc "Compile to classes and create jar"
+            :task (real-clojure "-T:build uber-jar")}
+
+  -graalvm-home
+  {:doc "Returns GRAALVM_HOME env var"
+   :task (let [env (System/getenv "GRAALVM_HOME")]
+           (assert env "Set GRAALVM_HOME")
+           env)}
+
+  -graalvm-native-image
+  {:doc "Installs/resolves graalvm native-image binary"
+   :depends [-graalvm-home]
+   :task (do (shell (str (fs/file -graalvm-home
+                                  "bin"
+                                  (if windows?
+                                    "gu.cmd"
+                                    "gu")))
+                    "install" "native-image")
+             (str (fs/file -graalvm-home
+                           "bin"
+                           (if windows?
+                             "native-image.cmd"
+                             "native-image"))))}
+
+  ;; Reproductions scenarios
+  sanity
+  {:doc "Simple sanity test, run our program using Clojure"
+   :task (real-clojure "-M -m hello-world.main")}
+
+  sanity-java
+  {:doc "Simple sanity test, run our program from compiled classes in jar"
+   :depends [clean uber-jar]
+   :task (shell "java -jar target/uber.jar")}
+
+  baseline
+  {:doc "Use global --initialize-at-build-time"
+   :depends [clean uber-jar -graalvm-native-image]
+   :task (do
+           (println "Building native image")
+           (shell -graalvm-native-image
+                  "--initialize-at-build-time"
+                  "--no-fallback"
+                  "-jar" "target/uber.jar"
+                  "-H:Name=target/hello-world")
+           (println "Running built native image")
+           (shell "target/hello-world"))}}}

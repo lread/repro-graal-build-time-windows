@@ -14,6 +14,8 @@ jobs:
           - { os: windows-latest, shell: powershell }
         repro:
           - sanity
+          - sanity-java
+          - baseline
     defaults:
       run:
         shell: ${{ matrix.sys.shell }}

@@ -3,3 +3,29 @@
 
 (ns build
   (:require [clojure.tools.build.api :as b]))
+
+(defn uber-jar [_]
+  (let [lib 'hello-world/hello-world
+        class-dir "target/classes"
+        basis (b/create-basis {:project "deps.edn"})
+        src-dirs ["src"]
+        uber-file "target/uber.jar"]
+    (println "Writing pom")
+    (b/write-pom {:class-dir class-dir
+                  :lib lib
+                  :version "1.0.0"
+                  :basis basis
+                  :src-dirs ["src"]})
+    (b/copy-dir {:src-dirs src-dirs
+                 :target-dir class-dir})
+
+    (println "Compiling Clojure sources to classes")
+    (b/compile-clj {:basis basis
+                    :src-dirs src-dirs
+                    :class-dir class-dir})
+
+    (println "Building uberjar")
+    (b/uber {:class-dir class-dir
+             :uber-file uber-file
+             :basis basis
+             :main 'hello-world.main})))
