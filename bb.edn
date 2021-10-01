@@ -59,6 +59,7 @@
            (println "Building native image")
            (shell -graalvm-native-image
                   "--initialize-at-build-time"
+                  "--verbose"
                   "--no-fallback"
                   "-jar" "target/uber.jar"
                   "-H:Name=target/hello-world")
@@ -72,6 +73,7 @@
            (println "Building native image")
            (shell -graalvm-native-image
                   "--no-fallback"
+                  "--verbose"
                   "-jar" "target/uber-gbt.jar"
                   "-H:Name=target/hello-world")
            (println "Running built native image")
@@ -84,6 +86,7 @@
            (println "Building native image")
            (shell -graalvm-native-image
                   "--no-fallback"
+                  "--verbose"
                   "--initialize-at-build-time=clojure,hello_world"
                   "-jar" "target/uber.jar"
                   "-H:Name=target/hello-world")
