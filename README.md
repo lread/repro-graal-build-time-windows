@@ -36,7 +36,7 @@ sanity        Simple sanity test, run our program using Clojure
 sanity-java   Simple sanity test, run our program from compiled classes in jar
 baseline      Build and run native image using global --initialize-at-build-time
 gbt           Build and run native image using graal-build-time without global --initialize-at-build-time. This one fails on Windows.
-specific-iabt Try to replicate graal-build-time work by expressing as specific --initialize-at-build-time
+specific-iabt Try to replicate graal-build-time work by expressing as specific --initialize-at-build-time. Also fails on Windows.
 ```
 
 The task that fails on Windows are `gbt` and `specific-iabt`.
@@ -49,3 +49,4 @@ Which is good, the problem is not triggered by the way graal-build-time is doing
 
 Have setup GitHub Actions to run each scenario under macOS, ubuntu and Windows.
 We should see failure for Windows for `gbt`.
+We also see a failure for `specific-iabt`.
