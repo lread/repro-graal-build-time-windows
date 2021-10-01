@@ -3,7 +3,7 @@ name: Reproduce GraalVM Issue
 on: push
 
 jobs:
-  scenario:
+  repro:
     runs-on: ${{ matrix.sys.os }}
     strategy:
       fail-fast: false
@@ -16,6 +16,9 @@ jobs:
           - sanity
           - sanity-java
           - baseline
+
+    name: ${{ matrix.sys.os }} - ${{ matrix.repro }}
+
     defaults:
       run:
         shell: ${{ matrix.sys.shell }}
