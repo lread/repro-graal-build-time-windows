@@ -20,7 +20,8 @@
     (println "Compiling Clojure sources to classes")
     (b/compile-clj {:basis basis
                     :src-dirs src-dirs
-                    :class-dir class-dir})
+                    :class-dir class-dir
+                    :ns-compile '[hello-world.main]})
 
     (println "Building uberjar" uber-file)
     (b/uber {:class-dir class-dir
