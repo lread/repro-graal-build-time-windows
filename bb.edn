@@ -52,7 +52,7 @@
    :depends [clean uber-jar]
    :task (shell "java -jar target/uber.jar")}
 
-  baseline
+  global-iabt
   {:doc "Build and run native image using global --initialize-at-build-time"
    :depends [clean uber-jar -graalvm-native-image]
    :task (do

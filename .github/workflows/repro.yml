@@ -15,7 +15,7 @@ jobs:
         repro:
           - sanity
           - sanity-java
-          - baseline
+          - global-iabt
           - gbt
           - specific-iabt
 
