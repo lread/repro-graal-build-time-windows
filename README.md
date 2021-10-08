@@ -13,7 +13,7 @@ The Clojure community has come up with `clj-easy\graal-build-time` as a migratio
 When I adopted this migration path, I discovered it was failing for me on the Windows platform.
 I have no known issues on macOS or Linux platforms.
 
-I have narrowed down a straightforward way to trigger the failure.
+I have narrowed down a straightforward way to trigger the failure:
 Ask native-image to build code that includes and runs Clojure tests.
 
 I have also been able to remove `clj-easy/graal-build-time` from the equation and reproduce the failure on Windows by using `--initialize-at-build-time` with the specific packages that `clj-easy/graal-build-time` would have discovered.
@@ -31,7 +31,7 @@ GraalVM can be found in the `java` scoop bucket.
 Clojure and Babashka can be found in the `scoop-clojure` bucket.
 
 ### What does success look like?
-On macOS and linux, when run, the resulting image should show:
+When run, the resulting image will output:
 
 ```
 Hello, running tests in sample namespace.
@@ -42,6 +42,9 @@ Ran 1 tests containing 1 assertions.
 0 failures, 0 errors.
 All done.
 ```
+
+This works without failure for macOS and Linux.
+For Windows, even though `native-image` fails, to my surprise, it actually produces an image that runs and produces the expected output.
 
 ### Graal Team
 I am not sure what works best for you, so offer some alternatives.
