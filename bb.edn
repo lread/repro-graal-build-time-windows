@@ -62,7 +62,8 @@
                   "--verbose"
                   "--no-fallback"
                   "-jar" "target/uber.jar"
-                  "-H:Name=target/hello-world")
+                  "-H:Path=target"
+                  "-H:Name=hello-world")
            (println "Running built native image")
            (shell "target/hello-world"))}
 
@@ -75,7 +76,8 @@
                   "--no-fallback"
                   "--verbose"
                   "-jar" "target/uber-gbt.jar"
-                  "-H:Name=target/hello-world")
+                  "-H:Path=target"
+                  "-H:Name=hello-world")
            (println "Running built native image")
            (shell "target/hello-world"))}
 
@@ -89,6 +91,7 @@
                   "--verbose"
                   "--initialize-at-build-time=clojure,hello_world"
                   "-jar" "target/uber.jar"
-                  "-H:Name=target/hello-world")
+                  "-H:Path=target"
+                  "-H:Name=hello-world")
            (println "Running built native image")
            (shell "target/hello-world"))}}}

@@ -2,6 +2,26 @@
 
 An attempt to reproduce an issue on that only occurs on Windows when using GraalVM native-image in conjunction with clj-easy/graal-build-time.
 
+## Updates
+
+### 2021-11-11 - Windows might not like a path in `-H:Name` value
+
+While poking around with `native-image` option `-H:+PrintAnalysisCallTree`, I noticed that on Windows, native-image was attempting to write reports to sub-directories under the `./reports` dir. I would get failures:
+```
+Fatal error:jdk.vm.ci.common.JVMCIError: java.nio.file.NoSuchFileException: Z:\proj\oss\lread\repro-graal-native-image-print-analysis-call-tree\reports\call_tree_target\hello-world_20211111_200847.txt
+```
+I found that odd.
+
+And then I noticed that I have an `-H:Name=target/hello-world`.
+
+It dawned on me that Windows `native-image` was not considering that the value for `-H:Name` might include a directory.
+Or that it might not understand the forward slash in this particular element.
+It seems to be the latter.
+
+When I retried using the Windows with `-H:Name=target\hello-world`, my reports generated fine.
+
+Since I suspect specifying a dir as as part of an `-H:Name` is perhaps unreliable, I have opted instead to specify my target path via `-H:Path`.
+
 ## Background
 The GraalVM team has deprecated the use of the global `--initiatize-at-build-time` and has scheduled it for removal in GraalVM v22.
 
